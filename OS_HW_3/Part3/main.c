@@ -48,11 +48,11 @@ int main(){
     Clean();
     if( result == 0 ){
         // 进行修正
-        sumB += ( MaxMallocB * sizeof(void*) + sizeof(unsigned long) );
-        print("MaxB: %uld"\n, sumB);
-        print("MaxKB: %uld"\n, sumB / KB);
-        print("MaxMB: %uld"\n, sumB / MB);
-        print("MaxGB: %uld"\n, sumB / GB);
+        sumB += ( MaxMallocCount * sizeof(void*) + sizeof(unsigned long) );
+        print("MaxB: %uld\n", sumB);
+        print("MaxKB: %uld\n", sumB / KB);
+        print("MaxMB: %uld\n", sumB / MB);
+        print("MaxGB: %uld\n", sumB / GB);
     }else{
         printf("error on index");
     }
