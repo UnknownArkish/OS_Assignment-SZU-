@@ -42,6 +42,11 @@ void ToRead(){
         temp = mems[i];
     }   
 }
+void ToWriteAndCheckStatus(){
+    for( int i = 0 ; i < MallocCount; i += ReadPerIndex ){
+        mems[i] = i % 256;
+    }   
+}
 
 int main(){
     Init();
