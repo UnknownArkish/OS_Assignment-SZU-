@@ -27,7 +27,7 @@ void Clean(){
 
 int ToTest( int index, unsigned int toMallocB ){
     if( toMallocB < MinMallocB ){
-        return 0;
+        return index;
     }
     if( index >= MaxMallocCount ){
         return -1;
@@ -42,17 +42,35 @@ int ToTest( int index, unsigned int toMallocB ){
         return ToTest( index, toMallocB / 2 );
     }
 }
+int ToTest_(){
+    int index = 0;
+    unsigned int toMallocB = MaxMallocB;
+    while( toMallocB >= MinMallocB ){
+        if( index >= MaxMallocCount )   return -1;
+        mems[index] = malloc(toMallocB);
+        if( mems[index] != NULL ){
+            sumB += toMallocB;
+            index++;
+        }else{
+            free(mems[index]);  mems[index] = NULL;
+            toMallocB /= 2;
+        }
+    }
+    return index;
+}
+
 
 int main(){
-    int result = ToTest( 0, MaxMallocB );
+    // int result = ToTest( 0, MaxMallocB );
+    int result = ToTest_();
     Clean();
-    if( result == 0 ){
+    if( result >= 0 ){
         // 进行修正
-        sumB += ( MaxMallocB * sizeof(void*) + sizeof(unsigned long) );
-        print("MaxB: %uld"\n, sumB);
-        print("MaxKB: %uld"\n, sumB / KB);
-        print("MaxMB: %uld"\n, sumB / MB);
-        print("MaxGB: %uld"\n, sumB / GB);
+        sumB += ( MaxMallocCount * sizeof(void*) + sizeof(unsigned long) );
+        printf("MaxB: %u\n", sumB);
+        printf("MaxKB: %u\n", sumB / KB);
+        printf("MaxMB: %u\n", sumB / MB);
+        printf("MaxGB: %u\n", sumB / GB);
     }else{
         printf("error on index");
     }

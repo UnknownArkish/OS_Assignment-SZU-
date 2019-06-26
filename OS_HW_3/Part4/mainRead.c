@@ -1,5 +1,6 @@
 
 #include<stdio.h>
+#include<stdlib.h>
 #include<malloc.h>
 #include<unistd.h>
 #include<sys/types.h>
@@ -19,10 +20,8 @@ char status[128];
 
 //  初始化程序
 void Init(){
-    mems = (char*)malloc( MallocB );
-
     pid_t pid = getpid();
-    sprintf(status, "/proc/%d/status", pid);
+    sprintf(status, "cat /proc/%d/status", pid);
 }
 // 清理程序
 void Clean(){
@@ -32,12 +31,12 @@ void Clean(){
     }
 }
 
-void LogStatus( char* msg = "" ){
+void LogStatus( char* msg ){
     printf("Status::%s\n", msg);
     system(status);
 }
 
-void ToReadAndCheckStatus(){
+void ToRead(){
     char temp;
     for( int i = 0 ; i < MallocCount; i += ReadPerIndex ){
         temp = mems[i];
@@ -46,10 +45,13 @@ void ToReadAndCheckStatus(){
 
 int main(){
     Init();
+    LogStatus("Begninning");
 
-    LogStatus( "Before Read" );
-    ToReadAndCheckStatus();
-    LogStatus( "After Read" );
+    mems = (char*)malloc( MallocB );
+    LogStatus( "After malloc 256MB, before read" );
+    
+    ToRead();
+    LogStatus( "After read" );
 
     Clean();
     return 0;

@@ -1,5 +1,6 @@
 
 #include<stdio.h>
+#include<stdlib.h>
 #include<malloc.h>
 #include<unistd.h>
 #include<sys/types.h>
@@ -16,8 +17,8 @@ char status[128];
 // 初始化程序
 void Init(){
     pid_t pid = getpid();
-    sprintf(maps, "/proc/%d/maps", pid);
-    sprintf(status, "/proc/%d/status", pid);
+    sprintf(maps, " cat /proc/%d/maps", pid);
+    sprintf(status, "cat /proc/%d/status", pid);
     for( int i = 0; i <= Count; i++ ){
         mems[i] = NULL;
     }
@@ -32,12 +33,11 @@ void Clean(){
     }
 }
 
-void LogMaps( char* msg = "" ){
+void LogMaps( char* msg ){
     printf("Maps::%s\n", msg);
     system(maps);
 }
-
-void LogStatus( char* msg = "" ){
+void LogStatus( char* msg ){
     printf("Status::%s\n", msg);
     system(status);
 }
@@ -47,13 +47,14 @@ int main(){
 
     LogMaps("Beginning");
     LogStatus("Beginning");
-
+    printf("\n");
     for( int i = 1 ; i <= Count ; i++ ){
         mems[i] = malloc( MB * 128 );
-        printf("#%d malloc: %px\n", mems[i]);
+        printf("#%d malloc: %p\n", mems[i]);
     }
     LogMaps( "After malloc 6 times 128MB" );
     LogStatus("After malloc 6 times 128MB");
+    printf("\n");
 
     // 释放2、3、5号空间
     free( mems[2] );    mems[2] = NULL;
@@ -61,18 +62,21 @@ int main(){
     free( mems[5] );    mems[5] = NULL;
     LogMaps( "After free 2, 3, 5" );
     LogStatus("After malloc 2, 3, 5");
+    printf("\n");
 
     // 申请1024MB
     mems[0] = malloc( MB * 1024 );
     LogMaps( "After malloc 1024MB" );
     LogStatus("After malloc 1024MB");
+    printf("\n");
 
-    void* 64mb = malloc( MB * 64 );
-    LogMaps( "After malloc 64MB" );
-    LogStatus("After malloc 64MB");
+    void* mb64 = malloc( MB * 64 );
+    LogMaps( "After malloc 64mb" );
+    LogStatus("After malloc 64mb");
+    printf("\n");
 
     // 清理内存
-    free(64mb); 64mb = NULL;
+    free(mb64); mb64 = NULL;
     Clean();
     return 0;
 }

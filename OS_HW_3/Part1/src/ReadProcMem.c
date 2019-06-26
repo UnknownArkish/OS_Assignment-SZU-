@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<sys/mman.h>
-#include<fctnl.h>
+#include<fcntl.h>
 #include<string.h>
 #include<sys/ptrace.h>
 
@@ -18,7 +18,7 @@ int main(int argc, char** argv){
     sscanf(argv[1], "%llx", &pid);
     sscanf(argv[2], "%llx", &offset);
 
-    spritnf(fileName, "/proc/%llx/mem", pid);               // 准备mem文件的路径名
+    sprintf(fileName, "/proc/%llx/mem", pid);               // 准备mem文件的路径名
     // 文件操作，打开mem文件、并使用ptrace追踪目标进程
     int fd = fopen(fileName, O_RDONLY); 
     ptrace(PTRACE_ATTACH, pid, 0, 0);
