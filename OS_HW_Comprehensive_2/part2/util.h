@@ -5,3 +5,5 @@
 
 
 int GetContent( char buf[], int offset, int size, int endian );
+
+int Split(char** result, char* input, const char* delim);
